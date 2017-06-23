@@ -1,12 +1,10 @@
 /*-----------------------------------------------------------------------------
-* Notes : ETL script to prepate raw xml file for import_user upload
+* Notes : Script to prase raw xml file for import_user csv master upload
 *	  Custom fields like keywords need to be processed seperately
-*         and will be part of the futue release
-* Date  : 09/12/2016
 -----------------------------------------------------------------------------*/
 
 -----------------------------------------------------------------------------
--- create table to hold raw xml data
+-- Create table to hold raw xml data
 -----------------------------------------------------------------------------
 drop table if exists xml_input_numbered;
 create table xml_input_numbered
@@ -17,7 +15,7 @@ create table xml_input_numbered
 COPY xml_input_numbered FROM '<input file location>' CSV;
 
 -----------------------------------------------------------------------------
--- organize xml data with row_nums, node, and text values
+-- Organize xml data with row_nums, node, and text values
 -----------------------------------------------------------------------------
 drop table if exists xml_input_numbered_1;
 create table xml_input_numbered_1 as
@@ -54,7 +52,7 @@ select
 --select * from xml_input_numbered_1 limit 1000;
 
 -----------------------------------------------------------------------------
--- assign associated pmid to each row
+-- Assign associated pmid to each row
 -----------------------------------------------------------------------------
 drop table if exists xml_input_numbered_2;
 create table xml_input_numbered_2 as
@@ -72,7 +70,7 @@ create table xml_input_numbered_2 as
 --select * from xml_input_numbered_2 limit 100;
 
 -----------------------------------------------------------------------------
--- assign author ranking within each PMID
+-- Assign author ranking within each PMID
 -----------------------------------------------------------------------------
 drop table if exists xml_input_numbered_3; 
 create table xml_input_numbered_3 as
@@ -86,7 +84,7 @@ create table xml_input_numbered_3 as
 --select * from xml_input_numbered_3 order by raw_row_nums limit 100;
 
 -----------------------------------------------------------------------------
--- extract emails from affiliation data where available
+-- Extract emails from affiliation data where available
 -----------------------------------------------------------------------------
 drop table if exists  xml_input_numbered_4;
 create table  xml_input_numbered_4 as
@@ -108,7 +106,7 @@ create table  xml_input_numbered_4 as
 --select * from xml_input_numbered_4 order by raw_row_nums limit 100;
 
 -----------------------------------------------------------------------------
--- extract pmid and first names
+-- Extract pmid and first names
 -----------------------------------------------------------------------------
 drop table if exists pmid_firstname;
 create table pmid_firstname as
@@ -119,7 +117,7 @@ select pmid_full, author_ranking, text_value from xml_input_numbered_4 where nod
 --select count(*) from pmid_firstname limit 100
 
 -----------------------------------------------------------------------------
--- extract pmid and last names
+-- Extract pmid and last names
 -----------------------------------------------------------------------------
 drop table if exists pmid_lastname;
 create table pmid_lastname as
@@ -130,7 +128,7 @@ select pmid_full, author_ranking, text_value from xml_input_numbered_4 where nod
 --select * from pmid_lastname limit 100
 
 -----------------------------------------------------------------------------
--- extract pmid and Initials
+-- Extract pmid and Initials
 -----------------------------------------------------------------------------
 drop table if exists pmid_initials;
 create table pmid_initials as
@@ -141,7 +139,7 @@ select pmid_full, author_ranking, text_value from xml_input_numbered_4 where nod
 --select * from pmid_initials limit 100
 
 -----------------------------------------------------------------------------
--- extract pmid and emails
+-- Extract pmid and emails
 -----------------------------------------------------------------------------
 drop table if exists pmid_email;
 create table pmid_email as
@@ -152,7 +150,7 @@ select pmid_full, author_ranking, text_value, email from xml_input_numbered_4 wh
 --select count(*) from pmid_email where email is not null limit 100
 
 -----------------------------------------------------------------------------
--- join tables to get desited columns in a single row
+-- Join tables to get desited columns in a single row
 -----------------------------------------------------------------------------
 copy 
 (
